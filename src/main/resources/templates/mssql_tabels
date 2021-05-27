@@ -1,0 +1,69 @@
+mssql sry :)
+
+Drop table if exists [Order];
+Drop table if exists Flat;
+Drop table if exists Client;
+Drop table if exists Owner;
+Drop table if exists Rieltor;
+
+create table Client(
+id int identity (1,1) not null  constraint PK_ClinetId primary key ,
+username nvarchar(50) not null,
+password nvarchar(50) not null,
+firstname nvarchar(50) not null,
+lastname nvarchar(50) not null,
+);
+
+create table Owner
+(
+    id int identity (1,1) not null constraint PK_OwnerId  primary key ,
+    username nvarchar(50) not null,
+    password nvarchar(50) not null,
+    firstname nvarchar(50) not null,
+    lastname nvarchar(50) not null,
+);
+
+create table Flat
+(
+    id int identity (1,1) not null constraint PK_FlatId primary key ,
+    city nvarchar(50) not null,
+    address nvarchar(50) not null,
+    idOwner int not null default (1),
+);
+
+create table [Order]
+(
+    id int identity (1,1) not null constraint PK_Order primary key ,
+    description nvarchar(50) not null,
+    idClinet int not null default (1),
+    idFlat int not null default (1),
+    idRieltor int not null default (1),
+);
+
+create table Rieltor(
+ id int identity (1,1) not null constraint PK_RieltorId  primary key ,
+username nvarchar(50) not null,
+password nvarchar(50) not null,
+firstname nvarchar(50) not null,
+ lastname nvarchar(50) not null,
+
+);
+
+alter table Flat add constraint FK_OwnerId
+foreign key (idOwner) references Owner (id)
+on delete set default
+on update no action ;
+
+alter table [Order] add constraint FK_FlatId
+    foreign key (idFlat) references Flat (id)
+        on delete set default
+        on update no action ;
+
+alter table [Order] add constraint FK_RiletorId
+    foreign key (idRieltor) references Rieltor (id)
+        on delete set default
+        on update no action ;
+alter table [Order] add constraint FK_ClientId
+    foreign key (idClinet) references Client (id)
+        on delete set default
+        on update no action ;
